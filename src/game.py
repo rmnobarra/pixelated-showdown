@@ -13,7 +13,7 @@ class Game:
         pygame.mixer.init()
         self.WIDTH, self.HEIGHT = 800, 600
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        pygame.display.set_caption("Western Duel")
+        pygame.display.set_caption("Pixelated Showdown")
         self.clock = pygame.time.Clock()
 
         self.graphics = Graphics(self.screen, self.WIDTH, self.HEIGHT)

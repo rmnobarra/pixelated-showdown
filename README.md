@@ -1,19 +1,15 @@
-# Western Duel Game
+# Pixelated Showdown
 
-This is a simple 2D Western duel game implemented in Python using Pygame. The game features an 8-bit style with pixel art graphics and sound effects for an immersive experience.
+Pixelated Showdown is a fast-paced, retro-style dueling game where players face off against a computer opponent in a test of reflexes and timing.
 
-## Game Description
+## Game Overview
 
-In this game, you play as a cowboy facing off against a computer-controlled opponent in a Western duel. The duel starts randomly, and you must quickly input a series of arrow key combinations to outshoot your opponent.
+In Pixelated Showdown, players engage in pixel-art duels. The game features:
 
-## Features
-
-- 8-bit style pixel art graphics
-- Background music and sound effects
-- Random duel initiation
-- Arrow key combination challenge
-- Progress bar mechanic
-- Player and computer character animations
+- Quick-draw mechanics where timing is crucial
+- A computer opponent with varying difficulty
+- Retro-style pixel graphics
+- Sound effects and background music
 
 ## Project Structure
 
