@@ -1,5 +1,5 @@
 import pygame
-from graphics import Graphics  # Add this import at the top of the file
+from src.graphics import Graphics  # Add this import at the top of the file
 
 class Character:
     def __init__(self, x, y):

@@ -1,29 +1,35 @@
 import pygame
 import os
+import logging
 
 class SoundManager:
     def __init__(self):
-        pygame.mixer.init()
-        self.load_sounds()
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(current_dir)
+        sound_dir = os.path.join(project_root, 'assets', 'sounds')
 
-    def load_sounds(self):
+        self.background_music = self._load_sound(os.path.join(sound_dir, 'background_music.mp3'))
+        self.shoot_sound = self._load_sound(os.path.join(sound_dir, 'shoot.wav'))
+
+    def _load_sound(self, path):
         try:
-            self.shoot_sound = pygame.mixer.Sound(os.path.join("assets", "sounds", "shoot.wav"))
-            self.background_music = os.path.join("assets", "sounds", "background_music.mp3")
-            print("Audio files loaded successfully")
-        except pygame.error as e:
-            print(f"Error loading audio files: {e}")
-            print(f"Current working directory: {os.getcwd()}")
-            print("Make sure 'shoot.wav' and 'background_music.mp3' are in the 'assets/sounds/' directory.")
+            return pygame.mixer.Sound(path)
+        except FileNotFoundError:
+            logging.warning(f"Sound file not found: {path}")
+            return self._create_dummy_sound()
 
-    def play_shoot_sound(self):
-        if hasattr(self, 'shoot_sound'):
-            self.shoot_sound.play()
+    def _create_dummy_sound(self):
+        buffer = bytearray(22050)  # 1 second of silence (22050 is the sample rate)
+        return pygame.mixer.Sound(buffer=buffer)
 
     def play_background_music(self):
-        if hasattr(self, 'background_music'):
-            pygame.mixer.music.load(self.background_music)
-            pygame.mixer.music.play(-1)  # The -1 makes it loop indefinitely
+        if self.background_music:
+            self.background_music.play(-1)  # -1 means loop indefinitely
 
     def stop_background_music(self):
-        pygame.mixer.music.stop()
+        if self.background_music:
+            self.background_music.stop()
+
+    def play_shoot_sound(self):
+        if self.shoot_sound:
+            self.shoot_sound.play()

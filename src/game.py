@@ -1,11 +1,11 @@
 import pygame
 import random
 import sys
-import os
-from characters import Player, Computer
-from graphics import Graphics
-from sound import SoundManager
-from utils import draw_message, draw_progress_bar
+import logging
+from src.characters import Player, Computer
+from src.graphics import Graphics
+from src.sound import SoundManager
+from src.utils import draw_message, draw_progress_bar
 
 class Game:
     def __init__(self):
@@ -17,7 +17,13 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.graphics = Graphics(self.screen, self.WIDTH, self.HEIGHT)
-        self.sound_manager = SoundManager()
+        try:
+            self.sound_manager = SoundManager()
+            self.sound_manager.play_background_music()
+        except Exception as e:
+            logging.error(f"Failed to initialize sound: {e}")
+            self.sound_manager = None
+
         self.player = Player(100, self.HEIGHT - 140, self.graphics)
         self.computer = Computer(self.WIDTH - 140, self.HEIGHT - 140, self.graphics)
 
@@ -36,14 +42,16 @@ class Game:
         self.ANIMATION_DURATION = 30
 
     def run(self):
-        self.sound_manager.play_background_music()
+        if self.sound_manager:
+            self.sound_manager.play_background_music()
         running = True
         while running:
             running = self.handle_events()
             self.update()
             self.draw()
             self.clock.tick(60)
-        self.sound_manager.stop_background_music()
+        if self.sound_manager:
+            self.sound_manager.stop_background_music()
         pygame.quit()
         sys.exit()
 
@@ -123,7 +131,8 @@ class Game:
 
     def end_duel(self, winner):
         self.winner = winner
-        self.sound_manager.play_shoot_sound()
+        if self.sound_manager:
+            self.sound_manager.play_shoot_sound()
         self.duel_started = False
         if winner == "Player":
             self.player.set_state("shoot")
