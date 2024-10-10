@@ -1,0 +1,47 @@
+# Python-related files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.env
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Pygame-specific
+*.pyc
+
+# IDE-specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Audio files (uncomment if you want to exclude them from version control)
+# *.wav
+# *.mp3
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Build files
+build/
+dist/
+
+# Backup files
+*.bak
+
+# Configuration files (uncomment if you want to exclude them from version control)
+# config/*.json
+
+# Other project-specific files to ignore
+# Add any other files or directories specific to your project that shouldn't be tracked
