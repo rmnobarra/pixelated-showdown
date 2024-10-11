@@ -8,6 +8,7 @@ venv/
 env/
 .env
 .venv/
+ENV/
 
 # PyInstaller
 *.manifest
@@ -40,6 +41,20 @@ dist/
 
 # Backup files
 *.bak
+
+# Pytest
+.pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Project-specific directories (adjust as needed)
+src/__pycache__/
+tests/__pycache__/
+
+# Temporary files
+*.tmp
 
 # Configuration files (uncomment if you want to exclude them from version control)
 # config/*.json
