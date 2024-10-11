@@ -2,27 +2,24 @@ import pygame
 import random
 import sys
 import logging
+import time
 from src.characters import Player, Computer
 from src.graphics import Graphics
 from src.sound import SoundManager
 from src.utils import draw_message, draw_progress_bar
 
+logging.basicConfig(level=logging.INFO)
+
 class Game:
-    def __init__(self):
+    def __init__(self, window):
         pygame.init()
         pygame.mixer.init()
         self.WIDTH, self.HEIGHT = 800, 600
-        self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        pygame.display.set_caption("Pixelated Showdown")
+        self.screen = window  # Use the window passed from main.py
         self.clock = pygame.time.Clock()
 
         self.graphics = Graphics(self.screen, self.WIDTH, self.HEIGHT)
-        try:
-            self.sound_manager = SoundManager()
-            self.sound_manager.play_background_music()
-        except Exception as e:
-            logging.error(f"Failed to initialize sound: {e}")
-            self.sound_manager = None
+        self.sound_manager = SoundManager()
 
         self.player = Player(100, self.HEIGHT - 140, self.graphics)
         self.computer = Computer(self.WIDTH - 140, self.HEIGHT - 140, self.graphics)
@@ -41,38 +38,32 @@ class Game:
         self.animation_timer = 0
         self.ANIMATION_DURATION = 30
 
+        self.font = pygame.font.Font(None, 36)
+
     def run(self):
-        if self.sound_manager:
-            self.sound_manager.play_background_music()
+        self.sound_manager.play_sound('background_music')
         running = True
+        self.start_duel()  # Start the first duel
         while running:
-            running = self.handle_events()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                if event.type == pygame.KEYDOWN:
+                    if self.duel_started:
+                        self.check_input(event.key)
+                    elif event.key == pygame.K_RETURN and self.winner:
+                        self.reset_game()
+                        self.start_duel()  # Start a new duel after reset
+                    elif event.key == pygame.K_q:
+                        running = False
             self.update()
             self.draw()
             self.clock.tick(60)
-        if self.sound_manager:
-            self.sound_manager.stop_background_music()
+        self.sound_manager.stop_background_music()
         pygame.quit()
         sys.exit()
 
-    def handle_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return False
-            if event.type == pygame.KEYDOWN:
-                if self.duel_started:
-                    self.check_input(event.key)
-                elif event.key == pygame.K_RETURN and self.winner:
-                    self.reset_game()
-                elif event.key == pygame.K_q:
-                    return False
-        return True
-
     def update(self):
-        if not self.duel_started and not self.winner:
-            if random.random() < 0.01:
-                self.start_duel()
-
         if self.duel_started:
             self.progress += self.progress_speed
             if self.progress >= 100:
@@ -113,12 +104,35 @@ class Game:
         pygame.display.flip()
 
     def start_duel(self):
+        self.sound_manager.play_sound('start')
+        
+        for i in range(3, 0, -1):
+            self.graphics.draw_background()
+            self.player.draw(self.screen)
+            self.computer.draw(self.screen)
+            self.draw_text(str(i), (255, 255, 255), self.WIDTH // 2, self.HEIGHT // 2)
+            pygame.display.flip()
+            time.sleep(1)
+        
+        self.graphics.draw_background()
+        self.player.draw(self.screen)
+        self.computer.draw(self.screen)
+        self.draw_text("DUEL!", (255, 255, 255), self.WIDTH // 2, self.HEIGHT // 2)
+        pygame.display.flip()
+        time.sleep(1)
+
         self.duel_started = True
         self.arrow_combination = [random.choice(Graphics.ARROW_KEYS) for _ in range(4)]
         self.player_input = []
         self.progress = 0
         self.player.set_state("normal")
         self.computer.set_state("normal")
+
+    def draw_text(self, text, color, x, y):
+        text_surface = self.font.render(text, True, color)
+        text_rect = text_surface.get_rect()
+        text_rect.center = (x, y)
+        self.screen.blit(text_surface, text_rect)
 
     def check_input(self, key):
         if key in Graphics.ARROW_KEYS:
@@ -131,15 +145,16 @@ class Game:
 
     def end_duel(self, winner):
         self.winner = winner
-        if self.sound_manager:
-            self.sound_manager.play_shoot_sound()
+        self.sound_manager.play_sound('shoot')
         self.duel_started = False
         if winner == "Player":
             self.player.set_state("shoot")
             self.computer.set_state("hit")
+            self.sound_manager.play_sound('win')
         else:
             self.player.set_state("hit")
             self.computer.set_state("shoot")
+            self.sound_manager.play_sound('dead')
         self.animation_timer = self.ANIMATION_DURATION
 
     def reset_game(self):
