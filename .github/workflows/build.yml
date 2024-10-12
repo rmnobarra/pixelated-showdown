@@ -1,10 +1,9 @@
-name: Build Executables
+name: Build and Release
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    tags:
+      - 'v*'  # Trigger on version tags
 
 jobs:
   build-windows:
@@ -21,15 +20,18 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
     - name: Build executable
-      run: |
-        python -c "import sys; print(sys.executable)"
-        python -c "import PyInstaller; print(PyInstaller.__file__)"
-        python scripts/build.py
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      run: python scripts/build.py
+    - name: Create ZIP archive
+      run: Compress-Archive -Path dist\PixelatedShowdown.exe -DestinationPath PixelatedShowdown-Windows.zip
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: PixelatedShowdown-Windows
-        path: dist/PixelatedShowdown.exe
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./PixelatedShowdown-Windows.zip
+        asset_name: PixelatedShowdown-Windows.zip
+        asset_content_type: application/zip
 
   build-linux:
     runs-on: ubuntu-latest
@@ -45,13 +47,30 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
     - name: Build executable
-      run: |
-        python3 -c "import sys; print(sys.executable)"
-        python3 -c "import PyInstaller; print(PyInstaller.__file__)"
-        cat scripts/build.py
-        python3 scripts/build.py
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      run: python3 scripts/build.py
+    - name: Create tarball
+      run: tar -czvf PixelatedShowdown-Linux.tar.gz -C dist PixelatedShowdown
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: PixelatedShowdown-Linux
-        path: dist/PixelatedShowdown
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./PixelatedShowdown-Linux.tar.gz
+        asset_name: PixelatedShowdown-Linux.tar.gz
+        asset_content_type: application/gzip
+
+  create-release:
+    needs: [build-windows, build-linux]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
