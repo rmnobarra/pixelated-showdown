@@ -45,7 +45,7 @@ pixelated-showdown/
 
 2. Clone the repository:
    ```
-   git clone https://github.com/yourusername/pixelated-showdown.git
+   git clone https://github.com/rmnobarra/pixelated-showdown.git
    cd pixelated-showdown
    ```
 
@@ -70,14 +70,14 @@ pixelated-showdown/
 
 ## Game Chapters
 
-1. Chapter I - Little Bit (2 life bar, 4 combination keys)
-2. Chapter II - Brain Splitter (2 life bar, 4 combination keys)
-3. Chapter III - Slaughterhouse (4 life bar, 6 combination keys)
-4. Chapter IV - Boot (4 life bar, 8 combination keys)
-5. Chapter V - Few Locks (4 life bar, 8 combination keys)
-6. Chapter VI - Dry Lagoon (6 life bar, 8 combination keys)
-7. Chapter VII - Little Chinese (6 life bar, 8 combination keys)
-8. Chapter Final - Dried Gut (8 life bar, 12 combination keys)
+1. Chapter I - Little Bit 
+2. Chapter II - Brain Splitter 
+3. Chapter III - Slaughterhouse 
+4. Chapter IV - Boot 
+5. Chapter V - Few Locks
+6. Chapter VI - Dry Lagoon 
+7. Chapter VII - Little Chinese 
+8. Chapter VIII - Dried Gut
 
 ## Controls
 
@@ -116,3 +116,75 @@ To enable or disable debug mode, modify the `self.debug_mode` variable in the `G
 - Expand the storyline and character backgrounds
 
 Enjoy the showdown in Pixelated Showdown!
+
+## Building Executables
+
+To build executables for Windows or Linux, follow these steps:
+
+1. Ensure you have PyInstaller installed:
+   ```
+   pip install pyinstaller
+   ```
+
+2. Run the build script:
+
+   For Windows:
+   ```
+   python scripts/build.py
+   ```
+
+   For Linux:
+   ```
+   python3 scripts/build.py
+   ```
+
+3. The executable will be created in the `dist` folder.
+
+## Installation
+
+### Pre-built Executables
+
+You can download pre-built executables for Windows and Linux from the latest GitHub Actions build:
+
+1. Go to the [Actions tab](https://github.com/yourusername/pixelated-showdown/actions) in the GitHub repository.
+2. Click on the latest successful workflow run.
+3. Scroll down to the "Artifacts" section.
+4. Download the appropriate artifact for your operating system:
+   - `PixelatedShowdown-Windows.zip` for Windows
+   - `PixelatedShowdown-Linux.zip` for Linux
+
+After downloading, extract the zip file and run the executable:
+- On Windows: Double-click `PixelatedShowdown.exe`
+- On Linux: Open a terminal in the extracted directory and run `./PixelatedShowdown`
+
+### Building from Source
+
+If you prefer to build the game from source, follow these steps:
+
+1. Ensure you have Python 3.x and pip installed on your system.
+2. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/pixelated-showdown.git
+   cd pixelated-showdown
+   ```
+3. Install the required dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+4. Run the game:
+   ```
+   python src/main.py
+   ```
+
+## Building Executables Locally
+
+To build executables on your local machine:
+
+1. Ensure you have PyInstaller installed:
+   ```
+   pip install pyinstaller
+   ```
+2. Run the build script:
+   - For Windows: `python scripts/build.py`
+   - For Linux: `python3 scripts/build.py`
+3. The executable will be created in the `dist` folder.
