@@ -9,6 +9,7 @@ class Graphics:
         self.HEIGHT = height
         self.load_images()
         self.create_background()
+        self.heart_image = self.create_heart_image()
 
     def load_images(self):
         self.arrow_images = {
@@ -31,19 +32,84 @@ class Graphics:
             "win": self.create_computer_win_image(),
             "hit": self.create_computer_hit_image()
         }
+        
+        self.enemy_images = {
+            "Little Bit": self.create_enemy_image("Little Bit"),
+            "Brain Splitter": self.create_enemy_image("Brain Splitter"),
+            "Slaughterhouse": self.create_enemy_image("Slaughterhouse"),
+            "Boot": self.create_enemy_image("Boot"),
+            "Few Locks": self.create_enemy_image("Few Locks"),
+            "Dry Lagoon": self.create_enemy_image("Dry Lagoon"),
+            "Little Chinese": self.create_enemy_image("Little Chinese"),
+            "Dried Gut": self.create_enemy_image("Dried Gut")
+        }
 
     def create_arrow_image(self, direction):
-        size = 30
+        size = 60  # Increased size
         image = pygame.Surface((size, size), pygame.SRCALPHA)
         color = (255, 255, 255)  # White color
+        border_color = (100, 100, 100)  # Gray color for border
+        
+        # Draw the key border
+        pygame.draw.rect(image, border_color, (0, 0, size, size))
+        pygame.draw.rect(image, color, (2, 2, size-4, size-4))
+        
+        # Draw the arrow
         if direction == "left":
-            pygame.draw.polygon(image, color, [(size, 0), (0, size//2), (size, size)])
+            arrow = [
+                [0,0,0,0,0,0,0],
+                [0,0,0,1,0,0,0],
+                [0,0,1,1,0,0,0],
+                [0,1,1,1,0,0,0],
+                [1,1,1,1,1,1,1],
+                [0,1,1,1,0,0,0],
+                [0,0,1,1,0,0,0],
+                [0,0,0,1,0,0,0],
+                [0,0,0,0,0,0,0]
+            ]
         elif direction == "up":
-            pygame.draw.polygon(image, color, [(0, size), (size//2, 0), (size, size)])
+            arrow = [
+                [0,0,0,0,0,0,0],
+                [0,0,0,1,0,0,0],
+                [0,0,1,1,1,0,0],
+                [0,1,1,1,1,1,0],
+                [1,1,1,1,1,1,1],
+                [0,0,0,1,0,0,0],
+                [0,0,0,1,0,0,0],
+                [0,0,0,1,0,0,0],
+                [0,0,0,0,0,0,0]
+            ]
         elif direction == "right":
-            pygame.draw.polygon(image, color, [(0, 0), (size, size//2), (0, size)])
+            arrow = [
+                [0,0,0,0,0,0,0],
+                [0,0,0,1,0,0,0],
+                [0,0,0,1,1,0,0],
+                [0,0,0,1,1,1,0],
+                [1,1,1,1,1,1,1],
+                [0,0,0,1,1,1,0],
+                [0,0,0,1,1,0,0],
+                [0,0,0,1,0,0,0],
+                [0,0,0,0,0,0,0]
+            ]
         elif direction == "down":
-            pygame.draw.polygon(image, color, [(0, 0), (size, 0), (size//2, size)])
+            arrow = [
+                [0,0,0,0,0,0,0],
+                [0,0,0,1,0,0,0],
+                [0,0,0,1,0,0,0],
+                [0,0,0,1,0,0,0],
+                [1,1,1,1,1,1,1],
+                [0,1,1,1,1,1,0],
+                [0,0,1,1,1,0,0],
+                [0,0,0,1,0,0,0],
+                [0,0,0,0,0,0,0]
+            ]
+        
+        pixel_size = 6
+        for y, row in enumerate(arrow):
+            for x, pixel in enumerate(row):
+                if pixel:
+                    pygame.draw.rect(image, (0, 0, 0), (x * pixel_size + 6, y * pixel_size + 6, pixel_size, pixel_size))
+        
         return image
 
     def create_pixel_art(self, width, height, color, pixels):
@@ -176,13 +242,91 @@ class Graphics:
         self.screen.blit(self.background, (0, 0))
 
     def draw_arrow_combination(self, combination):
+        arrow_size = 25  # Slightly smaller arrows
+        spacing = 5
+        total_width = len(combination) * (arrow_size + spacing) - spacing
+        start_x = self.WIDTH - total_width - 10  # 10 pixels from the right edge
+        start_y = 40  # Just below the enemy lives
+
         for i, key in enumerate(combination):
             image = self.arrow_images.get(key)
             if image:
-                self.screen.blit(image, (self.WIDTH - 250 + i * 35, 20))
+                scaled_image = pygame.transform.scale(image, (arrow_size, arrow_size))
+                self.screen.blit(scaled_image, (start_x + i * (arrow_size + spacing), start_y))
 
     def get_player_image(self, state):
         return self.player_images.get(state, self.player_images["normal"])
 
     def get_computer_image(self, state):
         return self.computer_images.get(state, self.computer_images["normal"])
+
+    def create_heart_image(self):
+        size = 20
+        image = pygame.Surface((size, size), pygame.SRCALPHA)
+        color = (255, 0, 0)  # Red color for heart
+        
+        heart = [
+            [0,1,1,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [1,1,1,1,1,1,1],
+            [0,1,1,1,1,1,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,1,0,0,0],
+        ]
+        
+        pixel_size = 2
+        for y, row in enumerate(heart):
+            for x, pixel in enumerate(row):
+                if pixel:
+                    pygame.draw.rect(image, color, (x * pixel_size + 3, y * pixel_size + 4, pixel_size, pixel_size))
+        
+        return image
+
+    def draw_player_lives(self, lives):
+        for i in range(lives):
+            self.screen.blit(self.heart_image, (10 + i * 25, 10))
+
+    def draw_enemy_lives(self, lives):
+        for i in range(lives):
+            self.screen.blit(self.heart_image, (self.WIDTH - 30 - i * 25, 10))
+
+    def create_enemy_image(self, enemy_name):
+        # Create different pixel art for each enemy
+        if enemy_name == "Little Bit":
+            pixels = [
+                [0,0,1,1,1,1,0,0],
+                [0,1,1,1,1,1,1,0],
+                [1,0,1,0,0,1,0,1],
+                [1,1,1,1,1,1,1,1],
+                [0,1,1,1,1,1,1,0],
+                [0,0,1,0,0,1,0,0],
+                [0,1,0,0,0,0,1,0],
+                [1,0,0,0,0,0,0,1]
+            ]
+        elif enemy_name == "Brain Breaker":
+            pixels = [
+                [0,1,1,1,1,1,1,0],
+                [1,1,0,1,1,0,1,1],
+                [1,0,1,1,1,1,0,1],
+                [1,1,1,0,0,1,1,1],
+                [1,1,0,1,1,0,1,1],
+                [0,1,1,1,1,1,1,0],
+                [0,0,1,0,0,1,0,0],
+                [0,1,0,0,0,0,1,0]
+            ]
+        # ... (create pixel art for other enemies)
+        else:
+            pixels = [
+                [0,1,1,1,1,1,0,0],
+                [1,1,1,1,1,1,1,0],
+                [1,0,1,1,1,0,1,0],
+                [1,1,1,1,1,1,1,0],
+                [0,1,1,1,1,1,1,0],
+                [0,0,1,1,1,0,1,0],
+                [0,1,0,1,0,1,0,0],
+                [1,0,0,1,0,0,1,0]
+            ]
+        return self.create_pixel_art(50, 50, (0, 0, 0), pixels)
+
+    def get_enemy_image(self, enemy_name):
+        return self.enemy_images.get(enemy_name, self.enemy_images["Little Bit"])

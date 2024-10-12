@@ -7,5 +7,16 @@ def draw_message(screen, message, width, height, y_offset=0):
     screen.blit(text, text_rect)
 
 def draw_progress_bar(screen, x, y, width, height, progress):
-    pygame.draw.rect(screen, (255, 255, 255), (x, y, width, height))
-    pygame.draw.rect(screen, (255, 0, 0), (x, y, width * (progress / 100), height))
+    border_color = (100, 100, 100)  # Gray
+    bar_color = (255, 0, 0)  # Red
+    background_color = (30, 30, 30)  # Dark Gray
+
+    # Draw background
+    pygame.draw.rect(screen, background_color, (x, y, width, height))
+
+    # Draw progress
+    progress_width = int(width * progress / 100)
+    pygame.draw.rect(screen, bar_color, (x, y, progress_width, height))
+
+    # Draw border
+    pygame.draw.rect(screen, border_color, (x, y, width, height), 2)

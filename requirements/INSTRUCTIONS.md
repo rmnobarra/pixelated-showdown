@@ -36,7 +36,22 @@ The gunslinger vowed revenge—deadly revenge.
 
 After a bloody journey of retribution, the gunslinger finally fulfilled his promise, and the entire Dried Gut gang was defeated. 
 
-At last, his family could rest in peace, and once more, his guns were laid to rest.
+![image 06](../assets/images/06.png)
+
+At last, his family could rest in peace...
+
+![image 07](../assets/images/07.png)
+
+and once more, his guns were laid to rest.
+
+![image 08](../assets/images/08.png)
+
+Song: assets/sounds/the_final_sunset.mp3
+
+Pixelated Showdown
+
+The end.
+
 
 ## Gameplay
 
@@ -72,25 +87,25 @@ At last, his family could rest in peace, and once more, his guns were laid to re
 1. Chapter I - Little Bit
   * 2 life bar
   * 4 combination keys
-2. Chapter II - Brain Breaker
+2. Chapter II - Brain Splitter
   * 2 life bar
   * 4 combination keys
-3. Chapter Final - Dry Gut
+3. Chapter III - Slaughterhouse
   * 4 life bar
   * 6 combination keys
-4. Chapter III - Slaughterhouse
-  * 4 life bar
-  * 6 combination keys
-5. Chapter IV - Boot
+4. Chapter IV - Boot
   * 4 life bar
   * 8 combination keys
-6. Chapter VI - Few Locks
+5. Chapter V - Few Locks
   * 4 life bar
   * 8 combination keys
-7. Chapter VII - Dry Lagoon
+6. Chapter VI - Dry Lagoon
   * 6 life bar
   * 8 combination keys
-8. Chapter VIII - Dried Gut
+7. Chapter VII - Little Chinese
+  * 6 life bar
+  * 8 combination keys
+8. Chapter Final - Dried Gut
   * 8 life bar
   * 12 combination keys
 
