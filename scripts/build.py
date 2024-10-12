@@ -17,7 +17,6 @@ def build_executable():
     # Get the root directory of the project (one level up from the script directory)
     root_dir = os.path.dirname(script_dir)
     
-    # Print current directory and list files for debugging
     print(f"Current directory: {os.getcwd()}")
     print("Files in current directory:")
     for file in os.listdir():
@@ -28,15 +27,25 @@ def build_executable():
     for file in os.listdir(root_dir):
         print(f"  {file}")
     
-    # Try to find the main script
+    # Look for the main script in the src directory
+    src_dir = os.path.join(root_dir, 'src')
+    if not os.path.exists(src_dir):
+        raise FileNotFoundError(f"Source directory not found at {src_dir}")
+    
+    print(f"\nSource directory: {src_dir}")
+    print("Files in source directory:")
+    for file in os.listdir(src_dir):
+        print(f"  {file}")
+    
+    # Try to find the main script in the src directory
     main_script = None
-    for file in os.listdir(root_dir):
-        if file.endswith('.py') and file != 'setup.py':
-            main_script = os.path.join(root_dir, file)
+    for file in os.listdir(src_dir):
+        if file.endswith('.py'):
+            main_script = os.path.join(src_dir, file)
             break
     
     if not main_script:
-        raise FileNotFoundError("Could not find a suitable main Python script.")
+        raise FileNotFoundError("Could not find a suitable main Python script in the src directory.")
     
     print(f"\nUsing main script: {main_script}")
     
