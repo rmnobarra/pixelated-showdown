@@ -6,31 +6,32 @@ This script uses PyInstaller to create standalone executables for
 Windows and Linux platforms.
 """
 
-import PyInstaller.__main__
-import sys
 import os
+import sys
+import PyInstaller.__main__
 
 def build_executable():
     """Build the executable for the current platform."""
-    # Determine the correct path separator based on the OS
-    separator = '\\' if sys.platform.startswith('win') else '/'
-
-    # Set the path to your main.py file
-    main_file = f'src{separator}main.py'
-
-    # Set the path to your assets folder
-    assets_folder = f'assets{separator}'
-
+    # Get the directory of the current script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    # Get the root directory of the project (one level up from the script directory)
+    root_dir = os.path.dirname(script_dir)
+    
+    # Define the path to the main script
+    main_script = os.path.join(root_dir, 'main.py')  # Adjust this if your main script has a different name
+    
+    # Define additional data files to include
+    assets_dir = os.path.join(root_dir, 'assets')
+    
     # PyInstaller command line arguments
     args = [
-        main_file,
+        main_script,
         '--onefile',
         '--windowed',
-        f'--add-data={assets_folder}{separator}*{separator}assets{separator}',
+        f'--add-data={assets_dir}{os.pathsep}assets',
         '--name=PixelatedShowdown',
-        '--icon=assets/images/icon.ico',  # Make sure you have an icon file
     ]
-
+    
     # Run PyInstaller
     PyInstaller.__main__.run(args)
 
