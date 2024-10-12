@@ -48,16 +48,21 @@ class Player(Character):
 
 class Computer(Character):
     def __init__(self, x, y, graphics):
-        super().__init__(x, y)
+        self.x = x
+        self.y = y
         self.graphics = graphics
-        self.image = self.graphics.get_computer_image(self.state)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.state = "normal"
+        self.current_enemy = "Little Bit"
 
     def draw(self, screen):
-        self.image = self.graphics.get_computer_image(self.state)
-        screen.blit(self.image, (self.x, self.y))
+        image = self.graphics.get_enemy_image(self.current_enemy)
+        screen.blit(image, (self.x, self.y))
 
-    def get_image(self):
-        return self.graphics.get_computer_image(self.state)
+    def set_state(self, state):
+        self.state = state
+
+    def set_enemy(self, enemy_name):
+        self.current_enemy = enemy_name
+
+    def update(self):
+        pass
