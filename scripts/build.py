@@ -17,20 +17,46 @@ def build_executable():
     # Get the root directory of the project (one level up from the script directory)
     root_dir = os.path.dirname(script_dir)
     
-    # Define the path to the main script
-    main_script = os.path.join(root_dir, 'main.py')  # Adjust this if your main script has a different name
+    # Print current directory and list files for debugging
+    print(f"Current directory: {os.getcwd()}")
+    print("Files in current directory:")
+    for file in os.listdir():
+        print(f"  {file}")
+    
+    print(f"\nRoot directory: {root_dir}")
+    print("Files in root directory:")
+    for file in os.listdir(root_dir):
+        print(f"  {file}")
+    
+    # Try to find the main script
+    main_script = None
+    for file in os.listdir(root_dir):
+        if file.endswith('.py') and file != 'setup.py':
+            main_script = os.path.join(root_dir, file)
+            break
+    
+    if not main_script:
+        raise FileNotFoundError("Could not find a suitable main Python script.")
+    
+    print(f"\nUsing main script: {main_script}")
     
     # Define additional data files to include
     assets_dir = os.path.join(root_dir, 'assets')
+    if not os.path.exists(assets_dir):
+        print(f"Warning: Assets directory not found at {assets_dir}")
+        assets_arg = []
+    else:
+        assets_arg = [f'--add-data={assets_dir}{os.pathsep}assets']
     
     # PyInstaller command line arguments
     args = [
         main_script,
         '--onefile',
         '--windowed',
-        f'--add-data={assets_dir}{os.pathsep}assets',
         '--name=PixelatedShowdown',
-    ]
+    ] + assets_arg
+    
+    print(f"\nPyInstaller arguments: {args}")
     
     # Run PyInstaller
     PyInstaller.__main__.run(args)
