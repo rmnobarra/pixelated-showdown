@@ -21,7 +21,10 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
     - name: Build executable
-      run: python scripts/build.py
+      run: |
+        python -c "import sys; print(sys.executable)"
+        python -c "import PyInstaller; print(PyInstaller.__file__)"
+        python scripts/build.py
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
@@ -42,7 +45,11 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
     - name: Build executable
-      run: python3 scripts/build.py
+      run: |
+        python3 -c "import sys; print(sys.executable)"
+        python3 -c "import PyInstaller; print(PyInstaller.__file__)"
+        cat scripts/build.py
+        python3 scripts/build.py
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
